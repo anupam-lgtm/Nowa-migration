@@ -202,6 +202,7 @@ const NowaMigration = () => {
 
         <div className="flex justify-center">
           <Converter
+            isConfirming={isConfirming}
             btnLoader={isSendLoading}
             handleSubmit={handleSubmit}
             userInfoData={Number(formatEther(userInfo?.[0] || 0n))?.toFixed(2)}
@@ -211,7 +212,7 @@ const NowaMigration = () => {
           />
         </div>
 
-        <ScreenLoader isLoading={!!isConfirming} />
+        {/* <ScreenLoader isLoading={!!isConfirming} /> */}
       </div>
     </Surface>
   );

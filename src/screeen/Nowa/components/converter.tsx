@@ -3,6 +3,7 @@ import nowa from "../../../assets/nowa-coin.png";
 import logo from "../../../assets/today-win.svg";
 import Button from "../../../components/button";
 import { StakeSuccessCard } from "./stake";
+import { boolean } from "yup";
 
 function exchangeTaralToNowa(taralAmount: any, rate = 1.8) {
   if (taralAmount <= 0) {
@@ -15,6 +16,7 @@ function exchangeTaralToNowa(taralAmount: any, rate = 1.8) {
 
 export const Converter = ({
   migrationType,
+  isConfirming,
   userInfo,
   walletData,
   handleSubmit,
@@ -22,6 +24,7 @@ export const Converter = ({
   userInfoData,
 }: {
   migrationType?: string;
+  isConfirming?: boolean;
   userInfo?: any;
   walletData?: any;
   handleSubmit?: any;
@@ -81,7 +84,7 @@ export const Converter = ({
             btnLoader={btnLoader}
             onClick={handleSubmit}
           >
-            STAKE
+            {isConfirming ? "STAKING....." : "STAKE"}
           </Button>
         </div>
       )}
