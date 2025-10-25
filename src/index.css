@@ -1,0 +1,28 @@
+@import "tailwindcss";
+@import "@rainbow-me/rainbowkit/styles.css";
+
+body {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+}
+@theme {
+  --font-roboto: "Roboto Serif", serif;
+  --color-main: #00ffa9;
+  --color-white: #ffffff;
+  --color-background: #161d26;
+  --color-subcard: #12181f;
+  --color-card: #030705;
+  --color-newCard: #030705;
+  --color-secondText: #a4a8ab;
+  --color-up: #0caf60;
+  --color-Sub-cardopacity: #12181f80;
+  --color-GraysWhite: #ffffff;
+  --color-UpContainer: #1f2f2f;
+  --color-upopacity: #0caf6066;
+  --color-PendingContainer: #f7931a26;
+  --color-Pending: #fb774a;
+  --color-DownContainer: #332229;
+  --color-Down: #ef5350;
+  --color-text: #c3cddb;
+  --color-black: #000;
+}
