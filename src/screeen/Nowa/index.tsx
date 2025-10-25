@@ -4,7 +4,13 @@ import { useEffect, useMemo, useState } from "react";
 import TabsSection from "../../components/TabsBar";
 import { Stake } from "./components/stake";
 import { Converter } from "./components/converter";
-import { useWaitForTransactionReceipt, useSendTransaction, useAccount, useReadContract, useConfig } from 'wagmi'
+import {
+  useWaitForTransactionReceipt,
+  useSendTransaction,
+  useAccount,
+  useReadContract,
+  useConfig,
+} from "wagmi";
 import StakingContractABI from "../../abiFiles/StakingContractABI.json";
 import {
   MULTI_SIGN_ADDRESS,
@@ -19,16 +25,18 @@ import {
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
+import { Loader2 } from "lucide-react";
+import ScreenLoader from "../../components/loader/screenLoader";
 
 const tabs = ["TARAL", "RVLNG", "BIGBAIT"];
 
 const NowaMigration = () => {
   const [activeTab, setActiveTab] = useState("TARAL");
   const { address, isConnected } = useAccount();
-  const config = useConfig()
+  const config = useConfig();
   const { data: useUserWallet, refetch: walletRefetch } =
     useUserWalletBalance(address);
-  
+
   const [txHash, setTxHash] = useState(null);
   const [btnLoader, setBtnLoader] = useState(false);
   const { data: tokeSummaryData } = useTokenSummary(address);
@@ -47,12 +55,17 @@ const NowaMigration = () => {
     enabled: isConnected,
   });
 
-  const { data: hashData, sendTransactionAsync, error, isPending: isSendLoading } = useSendTransaction();
+  const {
+    data: hashData,
+    sendTransactionAsync,
+    error,
+    isPending: isSendLoading,
+  } = useSendTransaction();
   const {
     isLoading: isConfirming,
     isSuccess,
     data: receipt,
-    error: errorReciept
+    error: errorReciept,
   } = useWaitForTransactionReceipt({
     hash: hashData,
   });
@@ -73,7 +86,6 @@ const NowaMigration = () => {
   }, [userInfo]);
 
   const filterWalletData = useMemo(() => {
-    
     if (activeTab == "TARAL") {
       return useUserWallet?.allocations?.taral;
     }
@@ -113,7 +125,7 @@ const NowaMigration = () => {
       onSuccess: (data) => {
         refetch();
         walletRefetch();
-        setBtnLoader(false)
+        setBtnLoader(false);
         if (data?.data?.error) {
           toast.error(data?.data?.error);
         } else {
@@ -143,28 +155,27 @@ const NowaMigration = () => {
     }
 
     try {
-      const tx = await sendTransactionAsync({
-        to: MULTI_SIGN_ADDRESS,
-        value: parseEther("0.0000005"),
-      }, {
-        onError: (err) => {
-        }, onSuccess(data, variables, context) {
+      const tx = await sendTransactionAsync(
+        {
+          to: MULTI_SIGN_ADDRESS,
+          value: parseEther("0.0000005"),
         },
-      });
+        {
+          onError: (err) => {},
+          onSuccess(data, variables, context) {},
+        }
+      );
       console.log("✅ MetaMask transaction response:", tx);
       setBtnLoader(false);
       if (tx as any) {
         setTxHash(tx.hash);
       }
-
     } catch (error) {
-
-      toast.error(error?.shortMessage || 'Something went wrong')
+      toast.error(error?.shortMessage || "Something went wrong");
     } finally {
-      setBtnLoader(false)
+      setBtnLoader(false);
     }
   };
-
 
   return (
     <Surface className="text-white ">
@@ -188,6 +199,7 @@ const NowaMigration = () => {
           setActiveTab={setActiveTab}
           data={tabs}
         />
+
         <div className="flex justify-center">
           <Converter
             btnLoader={isSendLoading}
@@ -198,6 +210,8 @@ const NowaMigration = () => {
             migrationType={activeTab}
           />
         </div>
+
+        <ScreenLoader isLoading={!!isConfirming} />
       </div>
     </Surface>
   );
